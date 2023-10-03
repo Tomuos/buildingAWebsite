@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css?family=Varel-Round:400,700&display=swap');
+body{
+    background-color: #131316;
+    color: #ffffff;
+    font-family: Varela Round, sans-serif;
+    font-size: 16px;
+    padding: 0;
+    margin: 0;
+}
+
+section {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    min-height: 100vh;
+}
+
+.hidden {
+    opacity: 0;
+    filter: blur(5px);
+    transform: translateX(-100px);
+    transition: all 1.5s;
+}
+
+.show {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateX(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hidden {
+        transition: none;
+    }
+}
