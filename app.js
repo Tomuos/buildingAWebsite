@@ -17,47 +17,77 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-// Add canvas to container
 const container = document.getElementById('threejs-container');
 container.appendChild(renderer.domElement);
 
-// Add particles to the scene to simulate stars
 const particleGeometry = new THREE.BufferGeometry();
 const particleCount = 5000;
-const posArray = new Float32Array(particleCount * 3);
 
-for (let i = 0; i < posArray.length; i++) {
+const posArray = new Float32Array(particleCount * 3);
+const colorArray = new Float32Array(particleCount * 3);
+const sizeArray = new Float32Array(particleCount);
+
+for (let i = 0, j = 0; i < posArray.length; i += 3, j += 3) {
     posArray[i] = (Math.random() - 0.5) * 50;
+    posArray[i + 1] = (Math.random() - 0.5) * 50;
+    posArray[i + 2] = (Math.random() - 0.5) * 50;
+
+    colorArray[j] = Math.random();
+    colorArray[j + 1] = Math.random();
+    colorArray[j + 2] = Math.random();
+}
+
+for (let i = 0; i < sizeArray.length; i++) {
+    sizeArray[i] = Math.random() * 0.005 + 0.05;
 }
 
 particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+particleGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
+particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizeArray, 1));
 
-const particleMaterial = new THREE.PointsMaterial({
-    size: 0.005,
-    transparent: true,
-    color: 0xFFFFFF
+const vertexShader = `
+  attribute vec3 color;
+  attribute float size;
+  varying vec3 vColor;
+  void main() {
+    vColor = color;
+    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+    gl_PointSize = size * (300.0 / -mvPosition.z);
+    gl_Position = projectionMatrix * mvPosition;
+  }
+`;
+
+const fragmentShader = `
+  varying vec3 vColor;
+  void main() {
+    gl_FragColor = vec4(vColor, 1.0);
+  }
+`;
+
+const particleMaterial = new THREE.ShaderMaterial({
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+    transparent: true
 });
 
 const particles = new THREE.Points(particleGeometry, particleMaterial);
+
 scene.add(particles);
 
 camera.position.z = 5;
 
-// Animation function
 const animate = function () {
     requestAnimationFrame(animate);
-
     particles.rotation.x += 0.0005;
     particles.rotation.y += 0.0005;
-
     renderer.render(scene, camera);
 };
 
-// Fade in effect (set class to 'visible')
 setTimeout(() => {
     const section = document.getElementById('threejs-section');
     section.classList.remove('hidden');
     section.classList.add('visible');
-}, 2000);  // 2 seconds delay
+}, 2000);
 
 animate();
+
