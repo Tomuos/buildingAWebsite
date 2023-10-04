@@ -91,3 +91,32 @@ setTimeout(() => {
 
 animate();
 
+// Existing Three.js setup and animation code ...
+
+// Fade in effect (set class to 'visible')
+setTimeout(() => {
+    const section = document.getElementById('threejs-section');
+    section.classList.remove('hidden');
+    section.classList.add('visible');
+}, 2000);  // 2 seconds delay
+
+// Slow reveal of the message
+setTimeout(() => {
+    const message = document.getElementById('message');
+    message.style.visibility = 'visible';
+    let i = 0;
+    let text = message.textContent;
+    message.textContent = '';
+
+    const interval = setInterval(() => {
+        if (i < text.length) {
+            message.textContent += text.charAt(i);
+            i++;
+        } else {
+            clearInterval(interval);
+        }
+    }, 100); // reveal a new character every 100 milliseconds
+
+}, 4000);  // start revealing 4 seconds after page load
+
+// Existing animation function ...
