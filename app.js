@@ -1,15 +1,19 @@
+////////////// Intersection Observer //////////////
+
 const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) =>{
+    entries.forEach((entry) => {
         if(entry.isIntersecting) {
             entry.target.classList.add('show');
-        }else{
+        } else {
             entry.target.classList.remove('show');
         }
-    })
-})
+    });
+});
 
 const hiddenElements = document.querySelectorAll('.hidden');
 hiddenElements.forEach((el) => observer.observe(el));
+
+////////////// Three.js //////////////
 
 // Initialize Three.js scene, camera, and renderer
 const scene = new THREE.Scene();
@@ -19,6 +23,9 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 const container = document.getElementById('threejs-container');
 container.appendChild(renderer.domElement);
+
+
+////////////// Particles in Three.js //////////////
 
 const particleGeometry = new THREE.BufferGeometry();
 const particleCount = 5000;
@@ -45,6 +52,9 @@ particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3)
 particleGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
 particleGeometry.setAttribute('size', new THREE.BufferAttribute(sizeArray, 1));
 
+
+////////////// Shaders for Particles //////////////
+
 const vertexShader = `
   attribute vec3 color;
   attribute float size;
@@ -70,11 +80,17 @@ const particleMaterial = new THREE.ShaderMaterial({
     transparent: true
 });
 
+
+
+////////////// Adding Particles to Scene and Camera Configuration //////////////
+
 const particles = new THREE.Points(particleGeometry, particleMaterial);
 
 scene.add(particles);
 
 camera.position.z = 5;
+
+////////////// Animation Function //////////////
 
 const animate = function () {
     requestAnimationFrame(animate);
@@ -83,24 +99,18 @@ const animate = function () {
     renderer.render(scene, camera);
 };
 
-setTimeout(() => {
-    const section = document.getElementById('threejs-section');
-    section.classList.remove('hidden');
-    section.classList.add('visible');
-}, 2000);
-
 animate();
 
-// Existing Three.js setup and animation code ...
+///////////// Fade-in Three.js Section and Reveal Message /////////////
 
-// Fade in effect (set class to 'visible')
+// Fade in Three.js section after a 2-second delay
 setTimeout(() => {
     const section = document.getElementById('threejs-section');
     section.classList.remove('hidden');
     section.classList.add('visible');
 }, 2000);  // 2 seconds delay
 
-// Slow reveal of the message
+// Slowly reveal the message 4 seconds after page load
 setTimeout(() => {
     const message = document.getElementById('message');
     message.style.visibility = 'visible';
@@ -117,6 +127,29 @@ setTimeout(() => {
         }
     }, 100); // reveal a new character every 100 milliseconds
 
-}, 4000);  // start revealing 4 seconds after page load
+}, 4000);  // 4 seconds delay
+
 
 // Existing animation function ...
+setTimeout(() => {
+    const wavingHand = document.getElementById('waving-hand');
+    wavingHand.classList.remove('hidden');
+    wavingHand.classList.add('visible');
+}, 4000);  // make the hand visible 4 seconds after page load
+
+
+const interval = setInterval(() => {
+    if (i < text.length) {
+        message.textContent += text.charAt(i);
+        i++;
+    } else {
+        clearInterval(interval);
+
+        // Show waving hand only after the entire message is revealed
+        setTimeout(() => {
+            const wavingHand = document.getElementById('waving-hand');
+            wavingHand.classList.remove('hidden');
+            wavingHand.classList.add('visible');
+        }, 500);  // display the hand 500 milliseconds after the message is fully displayed
+    }
+}, 100); // reveal a new character every 100 milliseconds

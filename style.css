@@ -24,6 +24,22 @@ body{
     color: white;
     visibility: hidden;
   }
+
+  @keyframes wave-animation {
+    0% { transform: rotate(0deg); }
+    50% { transform: rotate(14deg); }
+    100% { transform: rotate(0deg); }
+  }
+  
+  #waving-hand {
+    position: absolute;
+    top: 45%;
+    left: 45%;
+    font-size: 24px;
+    color: white;
+    animation: wave-animation 1s infinite;
+  }
+  
   
 section {
     display: grid;
