@@ -13,10 +13,12 @@ const observer = new IntersectionObserver((entries) => {
 const hiddenElements = document.querySelectorAll('.hidden');
 hiddenElements.forEach((el) => observer.observe(el));
 
-////////////// Three.js //////////////
+//////////////three.js////////////
 
 // Initialize Three.js scene, camera, and renderer
 const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x030020); // Here's where you set the background color
+
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -45,7 +47,7 @@ for (let i = 0, j = 0; i < posArray.length; i += 3, j += 3) {
 }
 
 for (let i = 0; i < sizeArray.length; i++) {
-    sizeArray[i] = Math.random() * 0.005 + 0.05;
+    sizeArray[i] = Math.random() * 0.005 + 0.05 + 0.1;
 }
 
 particleGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
@@ -59,10 +61,11 @@ const vertexShader = `
   attribute vec3 color;
   attribute float size;
   varying vec3 vColor;
+  uniform float time;
   void main() {
     vColor = color;
     vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
-    gl_PointSize = size * (300.0 / -mvPosition.z);
+    gl_PointSize = size * (300.0 / -mvPosition.z) * (1.0 + sin(time + position.x));
     gl_Position = projectionMatrix * mvPosition;
   }
 `;
@@ -70,14 +73,24 @@ const vertexShader = `
 const fragmentShader = `
   varying vec3 vColor;
   void main() {
-    gl_FragColor = vec4(vColor, 1.0);
+    float r = 0.0;
+    vec2 cxy = 2.0 * gl_PointCoord - 1.0;
+    r = dot(cxy, cxy);
+    float alpha = 1.0 - r * r;
+    
+    gl_FragColor = vec4(vColor, alpha);
   }
 `;
 
+
+// Add time uniform in ShaderMaterial
 const particleMaterial = new THREE.ShaderMaterial({
     vertexShader: vertexShader,
     fragmentShader: fragmentShader,
-    transparent: true
+    transparent: true,
+    uniforms: {
+        time: { value: 0.0 }
+    }
 });
 
 
@@ -89,6 +102,33 @@ const particles = new THREE.Points(particleGeometry, particleMaterial);
 scene.add(particles);
 
 camera.position.z = 5;
+
+// Load lensflare texture
+const textureLoader = new THREE.TextureLoader();
+const lensFlareTexture = textureLoader.load('./images/lensflare.png'); // Replace the path accordingly
+
+// Create geometry and material for special stars
+const specialStarGeometry = new THREE.BufferGeometry();
+const specialStarCount = 200; // Number of special stars
+
+const specialPosArray = new Float32Array(specialStarCount * 3);
+for (let i = 0; i < specialPosArray.length; i += 3) {
+    specialPosArray[i] = (Math.random() - 0.5) * 50;
+    specialPosArray[i + 1] = (Math.random() - 0.5) * 50;
+    specialPosArray[i + 2] = (Math.random() - 0.5) * 50;
+}
+
+specialStarGeometry.setAttribute('position', new THREE.BufferAttribute(specialPosArray, 3));
+
+const specialStarMaterial = new THREE.PointsMaterial({
+    map: lensFlareTexture,
+    size: 0.5,  // You can adjust the size
+    transparent: true
+});
+
+// Create and add special stars to the scene
+const specialStars = new THREE.Points(specialStarGeometry, specialStarMaterial);
+scene.add(specialStars);
 
 ////////////// Animation Function //////////////
 
