@@ -193,3 +193,5 @@ const interval = setInterval(() => {
         }, 500);  // display the hand 500 milliseconds after the message is fully displayed
     }
 }, 100); // reveal a new character every 100 milliseconds
+
+
