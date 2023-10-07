@@ -8,11 +8,22 @@ body{
     margin: 0;
 }
 
+#about-me {
+  background-image: url('./images/star\ border.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  
+}
+
+
+
 .about-me, h1{
   margin-top: 10rem;
     font-size: 3rem;
     font-weight: 700;
     color: red;
+   
 }
 
 .about-me, h3{
@@ -20,7 +31,17 @@ body{
     font-weight: 600;    
     color: aquamarine;
    align-items: left;
+   
 }
+
+#skills {
+  background-image: url('./images/earthnobgwp.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+
+
 
 p{
     font-size: 1.2rem;
@@ -28,6 +49,7 @@ p{
     font-style: bold;
     color: #ffffff;
     line-height: 1.5;
+   
 }
 
 #navbar {
