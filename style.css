@@ -8,6 +8,28 @@ body{
     margin: 0;
 }
 
+.about-me, h1{
+  margin-top: 10rem;
+    font-size: 3rem;
+    font-weight: 700;
+    color: red;
+}
+
+.about-me, h3{
+    font-size: 1.5rem;
+    font-weight: 600;    
+    color: aquamarine;
+   align-items: left;
+}
+
+p{
+    font-size: 1.2rem;
+    font-weight: 400;
+    font-style: bold;
+    color: #ffffff;
+    line-height: 1.5;
+}
+
 #navbar {
   position: sticky;
   top: 0;
@@ -33,6 +55,9 @@ body{
 
 /* Existing CSS for navbar */
 /* ... */
+
+
+
 
 .menu-toggle {
   display: none;
@@ -105,6 +130,13 @@ body{
     animation: wave-animation 1s infinite;
   }
   
+  .centered-section {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    min-height: 100vh;
+}
+
   
 section {
     display: grid;
@@ -125,6 +157,8 @@ section {
     filter: blur(0);
     transform: translateX(0);
 }
+
+
 
 @media (prefers-reduced-motion: reduce) {
     .hidden {
