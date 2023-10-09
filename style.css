@@ -9,7 +9,7 @@ body{
 }
 
 #about-me {
-  background-image: url('./images/star\ border.png');
+  background-image: url('./images/starfield.png');
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -112,6 +112,11 @@ div.gallery ul li img:hover {
   transition: .5s;
 }
 
+.box:hover > img {
+  width: 100%;
+  height: 100%;
+}
+
 .box > span {
   font-size: 3.8vh;
   display: block;
@@ -126,7 +131,20 @@ div.gallery ul li img:hover {
   height: 100%;
 }
 
+@media screen and (max-width: 768px) {
+  .box > img {
+    /* Reset the width to 100% so it fits the screen */
+    width: 100%;
+    /* Reset the height to auto so it maintains aspect ratio */
+    height: auto;
+    object-fit: contain; /* Make sure the whole image is visible */
+  }
 
+  .box:hover > img {
+    /* Disable the zoom effect on hover for small screens */
+    transform: none;
+  }
+}
 
 #skills {
   background-image: url('./images/earthnobgwp.png');
