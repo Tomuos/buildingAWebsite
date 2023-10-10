@@ -93,7 +93,7 @@ div.gallery ul li img:hover {
   width: 100%;
   padding: 4% 2%;
   box-sizing: border-box;
-  height: 100vh;
+  height: auto;
 }
 
 .box {
@@ -103,11 +103,13 @@ div.gallery ul li img:hover {
   margin: 0 2%;
   box-shadow: 0 20px 30px rgba(0,0,0,.1);
   line-height: 0;
+  width: 50px; /* Reduce the width to your desired size */
+  height: 450px; /* Adjust the height to maintain aspect ratio */
 }
 
 .box > img {
-  width: 200%;
-  height: calc(100% - 10vh);
+  width: 100%;
+  height: 100%;
   object-fit: cover; 
   transition: .5s;
 }
@@ -131,12 +133,18 @@ div.gallery ul li img:hover {
   height: 100%;
 }
 
-@media screen and (max-width: 768px) {
+.hobbies-gallery img {
+  width: 100px;
+  height: auto;
+}
+
+
+@media screen and (max-width: 968px) {
   .box > img {
     /* Reset the width to 100% so it fits the screen */
     width: 100%;
     /* Reset the height to auto so it maintains aspect ratio */
-    height: auto;
+    height: 100%;
     object-fit: contain; /* Make sure the whole image is visible */
   }
 
@@ -244,7 +252,8 @@ p{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 24px;
+    font-size: 3rem;
+    font-weight: 700;
     color: white;
     visibility: hidden;
   }

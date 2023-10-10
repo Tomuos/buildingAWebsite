@@ -1,50 +1,46 @@
-document.addEventListener("DOMContentLoaded", function() {
-  const links = document.querySelectorAll("#navbar ul li a");
-  for (const link of links) {
-    link.addEventListener("click", clickHandler);
-  }
+document.addEventListener("DOMContentLoaded", function () {
+    // Smooth scroll event
+    const links = document.querySelectorAll("#navbar ul li a");
+    for (const link of links) {
+      link.addEventListener("click", clickHandler);
+    }
   
-  function clickHandler(e) {
-    e.preventDefault();
-    const href = this.getAttribute("href");
-    const offsetTop = document.querySelector(href).offsetTop;
-    
-    scroll({
-      top: offsetTop,
-      behavior: "smooth"
-    });
-  }
-});
-
-
-////////////// Intersection Observer //////////////
-
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-        if(entry.isIntersecting) {
-            entry.target.classList.add('show');
+    function clickHandler(e) {
+      e.preventDefault();
+      const href = this.getAttribute("href");
+      const offsetTop = document.querySelector(href)?.offsetTop || 0;
+      scroll({
+        top: offsetTop,
+        behavior: "smooth"
+      });
+    }
+  
+    // Intersection Observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
         } else {
-            entry.target.classList.remove('show');
+          entry.target.classList.remove('show');
         }
+      });
     });
-});
-
-const hiddenElements = document.querySelectorAll('.hidden');
-hiddenElements.forEach((el) => observer.observe(el));
-
-//////////////three.js////////////
-
-// Initialize Three.js scene, camera, and renderer
-const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x030020); // Here's where you set the background color
-
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-const container = document.getElementById('threejs-container');
-container.appendChild(renderer.domElement);
-
+  
+    const hiddenElements = document.querySelectorAll('.hidden');
+    hiddenElements.forEach((el) => observer.observe(el));
+  
+    // Three.js Initialization
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x030020);
+  
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  
+    const container = document.getElementById('threejs-container');
+    if (container) {
+      container.appendChild(renderer.domElement);
+    }
 
 ////////////// Particles in Three.js //////////////
 
@@ -162,55 +158,43 @@ animate();
 
 ///////////// Fade-in Three.js Section and Reveal Message /////////////
 
-// Fade in Three.js section after a 2-second delay
+// Fade-in Three.js section and reveal message
 setTimeout(() => {
     const section = document.getElementById('threejs-section');
-    section.classList.remove('hidden');
-    section.classList.add('visible');
-}, 2000);  // 2 seconds delay
-
-// Slowly reveal the message 4 seconds after page load
-setTimeout(() => {
-    const message = document.getElementById('message');
-    message.style.visibility = 'visible';
-    let i = 0;
-    let text = message.textContent;
-    message.textContent = '';
-
-    const interval = setInterval(() => {
-        if (i < text.length) {
-            message.textContent += text.charAt(i);
-            i++;
-        } else {
-            clearInterval(interval);
-        }
-    }, 100); // reveal a new character every 100 milliseconds
-
-}, 4000);  // 4 seconds delay
-
-
-// Existing animation function ...
-setTimeout(() => {
-    const wavingHand = document.getElementById('waving-hand');
-    wavingHand.classList.remove('hidden');
-    wavingHand.classList.add('visible');
-}, 4000);  // make the hand visible 4 seconds after page load
-
-
-const interval = setInterval(() => {
-    if (i < text.length) {
-        message.textContent += text.charAt(i);
-        i++;
-    } else {
-        clearInterval(interval);
-
-        // Show waving hand only after the entire message is revealed
-        setTimeout(() => {
-            const wavingHand = document.getElementById('waving-hand');
-            wavingHand.classList.remove('hidden');
-            wavingHand.classList.add('visible');
-        }, 500);  // display the hand 500 milliseconds after the message is fully displayed
+    if (section) {
+      section.classList.remove('hidden');
+      section.classList.add('visible');
     }
-}, 100); // reveal a new character every 100 milliseconds
+  }, 2000);
 
+  // Text reveal logic
+  setTimeout(() => {
+    const message = document.getElementById('message');
+    if (message) {
+      message.style.visibility = 'visible';
+      let i = 0;
+      let text = message.textContent || '';
+      message.textContent = '';
 
+      const interval = setInterval(() => {
+        if (i < text.length) {
+          message.textContent += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(interval);
+          revealWavingHand();  // Custom function to handle waving hand logic
+        }
+      }, 100);
+    }
+  }, 4000);
+
+  function revealWavingHand() {
+    setTimeout(() => {
+      const wavingHand = document.getElementById('waving-hand');
+      if (wavingHand) {
+        wavingHand.classList.remove('hidden');
+        wavingHand.classList.add('visible');
+      }
+    }, 500);
+  }
+});
